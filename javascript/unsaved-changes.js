@@ -1,6 +1,6 @@
 var onbeforeunload_set = false;
 function trackFormChanges( indicatorElemSelector, formContainerSelector, saveBtnSelector ){
-  $(window).load( function(){ startTrackFormChanges(indicatorElemSelector, formContainerSelector, saveBtnSelector ) } ) ;
+  $(document).ready( function(){ startTrackFormChanges(indicatorElemSelector, formContainerSelector, saveBtnSelector ) } ) ;
 }
 function startTrackFormChanges( indicatorElemSelector, formContainerSelector, saveBtnSelector ){
    var indicatorElem = $(indicatorElemSelector + ", " + saveBtnSelector);

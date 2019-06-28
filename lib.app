@@ -53,7 +53,7 @@ template saveButton_unsavedDefaultElements(){
   span[class="glyphicon glyphicon-floppy-disk"] " Save"
 }
 template saveButton_savedDefaultElements(){
-  span[class="glyphicon glyphicon-floppy-disk-saved"] " Saved"
+  span[class="glyphicon glyphicon-floppy-saved"] " Saved"
 }
 template saveButton_unsavedSpan(){
   span[class:="save-button unsaved btn btn-warning", all attributes]{
