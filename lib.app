@@ -5,8 +5,11 @@ section track form changes
 /**
 * Usage: For tracking changes, and updating indicator elements accordingly, call the `trackFormChanges` template with the following arguments:
 *  indicatorElemSelector - the css/jquery selector for elements that will get the `has-changes` class added when there are changes. `has-changes` will be removed after save
-*  formContainerSelector - the css/jquery selector of the form for which to track changes
+*  formContainerSelector - the css/jquery selector of the container element that has the form in it for which to track changes
 *  saveBtnSelector       - the css/jquery selector of the elements that will perform the save action. These elements also get the `has-changes` class
+*
+* Note: in order to update the form correctly after a (save) action, you need to use the `saveButtonContent` template in the elements of the submitlinks
+*       -or- call the `reportSaveActionResult` template inside the form. 
 */
 template trackFormChanges(indicatorElemSelector : String, formContainerSelector : String, saveBtnSelector : String){
   <script> trackFormChanges('~indicatorElemSelector', '~formContainerSelector', '~saveBtnSelector') </script>
@@ -16,7 +19,7 @@ template trackFormChanges(indicatorElemSelector : String, formContainerSelector 
 * Shorthand template when having a form (wrapped in formContainerSelector) that uses the saveButtonContent template inside action links for saving*
 */
 template trackFormChanges(formContainerSelector : String){
-  trackFormChanges(formContainerSelector + " .save-button", formContainerSelector, formContainerSelector + " .save-button")
+  trackFormChanges("", formContainerSelector, "")
 }
 
 template unsavedchangesIncludes( withCSS : Bool ){
@@ -46,6 +49,16 @@ template saveButtonContentCustom(unsavedChangesElements : TemplateElements){
   saveButton_unsavedSpan[all attributes]{
     unsavedChangesElements
   }
+  reportSaveActionResult
+}
+/**
+* This reports the action result back to the tracker.
+* After an (failing) test, the form gets rerendered with new elements that have no classes for unsaved-changes instrumented.
+* Especially when an action fails (i.e. when changes are not saved), the class used for unsaved changes should get re-applied,
+* and events be rebound to the newly rendered elements, which is what the `reportSaveActionResultFunction` does
+*/  
+template reportSaveActionResult(){
+    <script>reportSaveActionResult( ~(!getPage().isTransactionAborted()) );</script>
 }
 
 //templates to override - start -- Override these templates if default style (bootstrap) does not match the app style
@@ -66,3 +79,9 @@ template saveButton_savedSpan(){
   }
 }
 //templates to override - end
+
+section native java for checking action handling
+
+native class utils.AbstractPageServlet as PageServlet{
+   isTransactionAborted() : Bool
+}

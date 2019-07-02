@@ -1,18 +1,28 @@
-button:has(.save-button){
-  padding: 0px !important;
-  border: none;
-}
-.save-button.saved:not(.has-change), .save-button.has-change.unsaved {
-  display: inline-block;
-}
 .save-button.saved.has-change, .save-button.unsaved:not(.has-change){
   display: none;
 }
+.save-button.saved:not(.has-change), .save-button.has-change.unsaved{
+  display: inline-block;
+}
+.is-saving .save-button.saved{
+  display: none;
+}
+.is-saving .save-button.unsaved{
+  display: inline-block;
+}
+.is-saving .save-button.unsaved:after {
+    content: "*";
+    float: right;
+    position: absolute;
+    font-size: 20px;
+    margin-left: 1px;
+    margin-top: -5px;
+}
 .has-change:after {
-  content: "*";
-  float: right;
-  position: absolute;
-  font-size: 20px;
-  margin-left: 1px;
-  margin-top: -5px;
+    content: "*";
+    float: right;
+    position: absolute;
+    font-size: 20px;
+    margin-left: 1px;
+    margin-top: -5px;
 }
