@@ -6,13 +6,13 @@ section track form changes
 * Usage: For tracking changes, and updating indicator elements accordingly, call the `trackFormChanges` template with the following arguments:
 *  indicatorElemSelector - the css/jquery selector for elements that will get the `has-changes` class added when there are changes. `has-changes` will be removed after save
 *  formContainerSelector - the css/jquery selector of the container element that has the form in it for which to track changes
-*  saveBtnSelector       - the css/jquery selector of the elements that will perform the save action. These elements also get the `has-changes` class
+*  saveBtnOutsideFormSelector - the css/jquery selector of one or more elements that will perform a save action, but is located outside the form.
 *
 * Note: in order to update the form correctly after a (save) action, you need to use the `saveButtonContent` template in the elements of the submitlinks
 *       -or- call the `reportSaveActionResult` template inside the form. 
 */
-template trackFormChanges(indicatorElemSelector : String, formContainerSelector : String, saveBtnSelector : String){
-  <script> trackFormChanges('~indicatorElemSelector', '~formContainerSelector', '~saveBtnSelector') </script>
+template trackFormChanges(indicatorElemSelector : String, formContainerSelector : String, saveBtnOutsideFormSelector : String){
+  <script> trackFormChanges('~indicatorElemSelector', '~formContainerSelector', '~saveBtnOutsideFormSelector') </script>
 }
 
 /**
