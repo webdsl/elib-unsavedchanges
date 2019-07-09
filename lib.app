@@ -49,6 +49,7 @@ template saveButtonContentCustom(unsavedChangesElements : TemplateElements){
   saveButton_unsavedSpan[all attributes]{
     unsavedChangesElements
   }
+    
   reportSaveActionResult
 }
 /**
@@ -58,7 +59,10 @@ template saveButtonContentCustom(unsavedChangesElements : TemplateElements){
 * and events be rebound to the newly rendered elements, which is what the `reportSaveActionResultFunction` does
 */  
 template reportSaveActionResult(){
-    <script>reportSaveActionResult( ~(!getPage().isTransactionAborted()) );</script>
+  <script>reportSaveActionResult( ~(!getPage().isTransactionAborted()) );</script>
+}
+function reportSaveActionResult(){
+  runscript("reportSaveActionResult( ~(!getPage().isTransactionAborted()) )");
 }
 
 //templates to override - start -- Override these templates if default style (bootstrap) does not match the app style
