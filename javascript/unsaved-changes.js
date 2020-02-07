@@ -15,7 +15,7 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
     indicatorElem = $(indicatorSelectorCombined);
     formContainer = $(formContainerSelector);
     form = formContainer.find('form').first();
-    var newSaveBtnElem = form.find('[submitid]');
+    var newSaveBtnElem = form.find('[submitid]:not(.ignore-save-button)');
     if (newSaveBtnElem !== saveBtnElem) {
       saveBtnElem = newSaveBtnElem;
       if (saveBtnOutsideFormSelector != '') {
