@@ -26,7 +26,7 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
         reportSaveActionResultFunction = function(succeeded) {
           trackThisForm();
           if (succeeded) {
-            cloneSerialized = form.serialize();
+            cloneSerialized = getSerialized(form);
             modified = false;
             indicatorElem.removeClass('has-change');
           } else {
@@ -39,9 +39,9 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
     }
   }
   trackThisForm();
-  var cloneSerialized = form.serialize();
+  var cloneSerialized = getSerialized(form);
   var checkForChanges = function() {
-    modified = form.serialize() != cloneSerialized;
+    modified = getSerialized(form) != cloneSerialized;
     indicatorElem.toggleClass('has-change', modified);
   }
   var timer = 0;
@@ -71,6 +71,10 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
       }
     }
   }
+}
+
+function getSerialized( $formElem ){
+	return $formElem.find('input:not(.ignore-save-input)').serialize();
 }
 
 function reportSaveActionResult(success) {

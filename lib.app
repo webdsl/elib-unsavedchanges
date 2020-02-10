@@ -8,6 +8,9 @@ section track form changes
 *  formContainerSelector - the css/jquery selector of the container element that has the form in it for which to track changes
 *  saveBtnOutsideFormSelector - the css/jquery selector of one or more elements that will perform a save action, but is located outside the form.
 *
+* You can exclude submit button from being treated as save-action by attaching the `ignore-save-button` class to it.
+* Inputs that should be ignored for unsaved-changes tracking should get the `ignore-save-input` class.
+*
 * Note: in order to update the form correctly after a (save) action, you need to use the `saveButtonContent` template in the elements of the submitlinks
 *       -or- call the `reportSaveActionResult` template inside the form. 
 */
