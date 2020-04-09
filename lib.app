@@ -10,16 +10,18 @@ section track form changes
 *
 * You can exclude submit button from being treated as save-action by attaching the `ignore-save-button` class to it.
 * Inputs that should be ignored for unsaved-changes tracking should get the `ignore-save-input` class.
+* If there are buttons that would cause the page to unload, and don't want the leave-unsaved warning displayed, add `ignore-leave-page-unsaved` class to that button
 *
 * Note: in order to update the form correctly after a (save) action, you need to use the `saveButtonContent` template in the elements of the submitlinks
 *       -or- call the `reportSaveActionResult` template inside the form. 
 */
 template trackFormChanges(indicatorElemSelector : String, formContainerSelector : String, saveBtnOutsideFormSelector : String){
   <script> trackFormChanges('~indicatorElemSelector', '~formContainerSelector', '~saveBtnOutsideFormSelector') </script>
+  includeHead( rendertemplate( postProcess( "$(node).find('.ignore-leave-page-unsaved').on('click', function(){ window.onbeforeunload = function(){}; })" ) ) )
 }
 
 /**
-* Shorthand template when having a form (wrapped in formContainerSelector) that uses the saveButtonContent template inside action links for saving*
+* Shorthand template when having a form (wrapped in formContainerSelector) that uses the saveButtonContent template inside action links for saving
 */
 template trackFormChanges(formContainerSelector : String){
   trackFormChanges("", formContainerSelector, "")
@@ -57,7 +59,7 @@ template saveButtonContentCustom(unsavedChangesElements : TemplateElements){
 }
 /**
 * This reports the action result back to the tracker.
-* After an (failing) test, the form gets rerendered with new elements that have no classes for unsaved-changes instrumented.
+* After a (failing) test, the form gets rerendered with new elements that have no classes for unsaved-changes instrumented.
 * Especially when an action fails (i.e. when changes are not saved), the class used for unsaved changes should get re-applied,
 * and events be rebound to the newly rendered elements, which is what the `reportSaveActionResultFunction` does
 */  

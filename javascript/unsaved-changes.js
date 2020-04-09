@@ -10,19 +10,27 @@ var reportSaveActionResultFunction, submittedIndicatorElem;
 function startTrackFormChanges(indicatorElemSelector, formContainerSelector, saveBtnOutsideFormSelector) {
   var indicatorElem, formContainer, form, saveBtnElem;
   var modified = false;
+  var trackedForm;
+  if($(formContainerSelector).is('.changes-tracked')){
+    return;
+  };
   var trackThisForm = function() {
     var indicatorSelectorCombined = formContainerSelector + " .save-button" + (indicatorElemSelector.length ? ", " + indicatorElemSelector : "");
     indicatorElem = $(indicatorSelectorCombined);
     formContainer = $(formContainerSelector);
+    formContainer.addClass("changes-tracked");
     form = formContainer.find('form').first();
-    var newSaveBtnElem = form.find('[submitid]:not(.ignore-save-button)');
+    var newSaveBtnElem = form.find('[submitid]');
     if (newSaveBtnElem !== saveBtnElem) {
       saveBtnElem = newSaveBtnElem;
       if (saveBtnOutsideFormSelector != '') {
         saveBtnElem = saveBtnElem.add($(saveBtnOutsideFormSelector));
       }
-      saveBtnElem.click(function() {
-        submittedIndicatorElem = indicatorElem;
+      saveBtnElem.click(function(event) {
+        if(! $(event.target).is('.ignore-save-button') ){
+          submittedIndicatorElem = indicatorElem;
+        }
+
         reportSaveActionResultFunction = function(succeeded) {
           trackThisForm();
           if (succeeded) {
@@ -37,6 +45,13 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
         }
       });
     }
+    if( !form.is(trackedForm) ){
+      trackedForm = form;
+      trackedForm.on('keyup change paste', 'input, select, textarea', function() {
+        clearTimeout(timer);
+        timer = setTimeout(checkForChanges, 500);
+      });
+    }
   }
   trackThisForm();
   var cloneSerialized = getSerialized(form);
@@ -46,11 +61,7 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
   }
   var timer = 0;
 
-  //TODO: should this become part of trackThisForm, but with cleanup of event listeners? The listeners keep working so it seems, also after failing action
-  form.on('keyup change paste', 'input, select, textarea', function() {
-    clearTimeout(timer);
-    timer = setTimeout(checkForChanges, 500);
-  });
+
 
   if (!onbeforeunload_set) {
     onbeforeunload_set = true;
