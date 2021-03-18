@@ -47,7 +47,7 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
     }
     if( !form.is(trackedForm) ){
       trackedForm = form;
-      trackedForm.on('keyup change paste', 'input, select, textarea', function() {
+      trackedForm.on('keyup change paste input', 'input, select, textarea', function() {
         clearTimeout(timer);
         timer = setTimeout(checkForChanges, 500);
       });
