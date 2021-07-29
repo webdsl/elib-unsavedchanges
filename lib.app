@@ -7,6 +7,7 @@ section track form changes
 *  indicatorElemSelector - the css/jquery selector for elements that will get the `has-changes` class added when there are changes. `has-changes` will be removed after save
 *  formContainerSelector - the css/jquery selector of the container element that has the form in it for which to track changes
 *  saveBtnOutsideFormSelector - the css/jquery selector of one or more elements that will perform a save action, but is located outside the form.
+*  withPageWarning - optional boolean indicating whether or not to add a page element to be styled with fixed positioning as indicator element, which scrolls to the its parent element on click
 *
 * You can exclude submit button from being treated as save-action by attaching the `ignore-save-button` class to it.
 * Inputs that should be ignored for unsaved-changes tracking should get the `ignore-save-input` class.
@@ -16,16 +17,40 @@ section track form changes
 *       -or- call the `reportSaveActionResult` template inside the form. 
 */
 template trackFormChanges(indicatorElemSelector : String, formContainerSelector : String, saveBtnOutsideFormSelector : String){
-  <script> trackFormChanges('~indicatorElemSelector', '~formContainerSelector', '~saveBtnOutsideFormSelector') </script>
+  trackFormChanges(indicatorElemSelector, formContainerSelector, indicatorElemSelector, false)
+}
+template trackFormChanges(indicatorElemSelector : String, formContainerSelector : String, saveBtnOutsideFormSelector : String, withPageWarning : Bool){
+  var combinedIndicatorSelector := indicatorElemSelector
+  init{
+    if(withPageWarning){
+      var pageWarningSel := "#" + id;
+      if(combinedIndicatorSelector != ""){
+        combinedIndicatorSelector := combinedIndicatorSelector + ", " + combinedIndicatorSelector;
+      } else {
+        combinedIndicatorSelector :=  pageWarningSel;
+      }
+    }
+  }
+  
+  <script> trackFormChanges('~combinedIndicatorSelector', '~formContainerSelector', '~saveBtnOutsideFormSelector') </script>
   includeHead( rendertemplate( postProcess( "$(node).find('.ignore-leave-page-unsaved').on('click', function(){ window.onbeforeunload = function(){}; })" ) ) )
+  
+  if( withPageWarning ){
+    <a id=id href="javascript:void(0);" onclick="$('html, body').animate({ scrollTop: $(this).parent().offset().top}, 500);" class="unsaved-changes-page-warning">
+       pageWarningElem
+    </a>
+  }
+  
 }
 
-/**
-* Shorthand template when having a form (wrapped in formContainerSelector) that uses the saveButtonContent template inside action links for saving
-*/
-template trackFormChanges(formContainerSelector : String){
-  trackFormChanges("", formContainerSelector, "")
+template pageWarningElem(){
+	span[class="btn btn-xs btn-warning"]{ "You have unsaved changes"}
 }
+/**
+* Shorthand templates when having a form (wrapped in formContainerSelector) that uses the saveButtonContent template inside action links for saving
+*/
+template trackFormChanges(formContainerSelector : String){ trackFormChanges("", formContainerSelector, "", false) }
+template trackFormChanges(formContainerSelector : String, withPageWarning: Bool){ trackFormChanges("", formContainerSelector, "", withPageWarning) }
 
 template unsavedchangesIncludes( withCSS : Bool ){
   includeJS( IncludePaths.jQueryJS() )
