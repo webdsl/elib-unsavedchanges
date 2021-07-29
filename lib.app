@@ -54,12 +54,11 @@ template saveButtonContentCustom(unsavedChangesElements : TemplateElements){
   saveButton_unsavedSpan[all attributes]{
     unsavedChangesElements
   }
-    
   reportSaveActionResult
 }
 /**
 * This reports the action result back to the tracker.
-* After a (failing) test, the form gets rerendered with new elements that have no classes for unsaved-changes instrumented.
+* After a (failing) action, the form gets rerendered with new elements that have no classes for unsaved-changes instrumented.
 * Especially when an action fails (i.e. when changes are not saved), the class used for unsaved changes should get re-applied,
 * and events be rebound to the newly rendered elements, which is what the `reportSaveActionResultFunction` does
 */  

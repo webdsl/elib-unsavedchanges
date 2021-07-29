@@ -31,7 +31,7 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
         }
 
         reportSaveActionResultFunction = function(succeeded) {
-          trackThisForm();
+          trackThisForm(); //typically the form gets replaced, so we need to track the new form for changes after action
           if (succeeded) {
             cloneSerialized = getSerialized(form);
             modified = false;
@@ -63,26 +63,28 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
   }
   var timer = 0;
 
-
-
   if (!onbeforeunload_set) {
     onbeforeunload_set = true;
-    window.onbeforeunload = function() {
-      var hasChangeLen = $('.has-change').length;
-      showWarning = hasChangeLen;
-      if (showWarning) {
-        if (submittedIndicatorElem !== undefined) {
-          submittedHasChangeLen = submittedIndicatorElem.filter('.has-change').length;
-          submittedIndicatorElem.removeClass('has-change');
-          showWarning -= submittedHasChangeLen;
-        }
+    window.addEventListener("beforeunload", function (e) {
+      var hasChangeElems = $('.has-change');
+      
+      //If an action has been submitted for which the result has not been reported back (`reportSaveActionResultFunction` was not called)
+      if(submittedIndicatorElem !== undefined){
+        //ignore the indicator elements that were part of the submitted form
+        hasChangeElems = hasChangeElems.not(submittedIndicatorElem);
       }
+      
+      var showWarning = hasChangeElems.length > 0;
+      
       if (showWarning) {
-        return "You seem to have unsaved changes.";
+        var message = "You seem to have unsaved changes."; 
+        (e || window.event).returnValue = message;
+        return message;
       } else {
-        return;
+        return undefined;
       }
-    }
+      
+    })
   }
 }
 
