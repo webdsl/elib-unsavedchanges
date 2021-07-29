@@ -11,15 +11,14 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
   var indicatorElem, formContainer, form, saveBtnElem;
   var modified = false;
   var trackedForm;
-  if($(formContainerSelector).is('.changes-tracked')){
+  if($(formContainerSelector).find('form').first().is('.changes-tracked')){
     return;
   };
   var trackThisForm = function() {
     var indicatorSelectorCombined = formContainerSelector + " .save-button" + (indicatorElemSelector.length ? ", " + indicatorElemSelector : "");
     indicatorElem = $(indicatorSelectorCombined);
-    formContainer = $(formContainerSelector);
-    formContainer.addClass("changes-tracked");
-    form = formContainer.find('form').first();
+    form = $(formContainerSelector).find('form').first();
+    form.addClass("changes-tracked");
     var newSaveBtnElem = form.find('[submitid]');
     if (newSaveBtnElem !== saveBtnElem) {
       saveBtnElem = newSaveBtnElem;
