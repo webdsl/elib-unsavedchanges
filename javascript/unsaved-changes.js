@@ -89,7 +89,7 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
 }
 
 function getSerialized( $formElem ){
-	return $formElem.find(':input').not(".ignore-save-input").serialize();
+	return $formElem.find(':input').not(".ignore-save-input, .ignore-save-input :input").serialize();
 }
 
 function reportSaveActionResult(success) {
