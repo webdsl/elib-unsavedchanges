@@ -17,7 +17,7 @@ section track form changes
 *       -or- call the `reportSaveActionResult` template inside the form. 
 */
 template trackFormChanges(indicatorElemSelector : String, formContainerSelector : String, saveBtnOutsideFormSelector : String){
-  trackFormChanges(indicatorElemSelector, formContainerSelector, indicatorElemSelector, false)
+  trackFormChanges(indicatorElemSelector, formContainerSelector, saveBtnOutsideFormSelector, false)
 }
 template trackFormChanges(indicatorElemSelector : String, formContainerSelector : String, saveBtnOutsideFormSelector : String, withPageWarning : Bool){
   var combinedIndicatorSelector := indicatorElemSelector
