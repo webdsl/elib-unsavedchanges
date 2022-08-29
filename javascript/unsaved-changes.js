@@ -50,8 +50,11 @@ function startTrackFormChanges(indicatorElemSelector, formContainerSelector, sav
       }
       trackedForm = form;
       trackedForm.on('keyup change paste input', 'input, select, textarea', function() {
+        // directly update state on first change, but prevent change tracking to trigger every key press by using a 500ms delay
+        var delay = modified ? 500 : 0;
         clearTimeout(timer);
-        timer = setTimeout(checkForChanges, 500);
+        
+        timer = setTimeout(checkForChanges, delay);
       });
     }
   }
